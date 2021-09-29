@@ -1,6 +1,7 @@
 package com.company;
 
 import java.util.ArrayList;
+import java.util.Optional;
 
 public class Customer {
     private int customerID;
@@ -13,11 +14,22 @@ public class Customer {
         accounts = new ArrayList<BankAccount>();
     }
 
-    public boolean openAccount(double initialBalance) {
+    public BankAccount openAccount(double initialBalance) {
         var newAccount = new BankAccount();
         newAccount.deposit(initialBalance);
         var didSucceed = accounts.add(newAccount);
-        return didSucceed;
+        return newAccount;
+    }
+
+    public Optional<BankAccount> closeAccount(int accountNumber) {
+        for(var currentAccount : accounts) {
+            if(currentAccount.getAccountID() == accountNumber) {
+                accounts.remove(currentAccount);
+                return Optional.of(currentAccount);
+            }
+        }
+        System.out.println("Tried to remove an account but it didn't exist.");
+        return Optional.empty();
     }
 
 
